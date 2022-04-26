@@ -14,7 +14,7 @@ export default class AppRouter extends Component {
                     <Route path="/signup" element={<Signup />}></Route>
                     <Route path="/main" element={<Main />}></Route>
                     <Route path="/post" element={<Post />}></Route>
-                    <Route path="/" element={<Navigate replace to="/main" />} />
+                    <Route path="/" element={<Navigate replace to="/login" />} />
                 </Routes>
             </div>
         )

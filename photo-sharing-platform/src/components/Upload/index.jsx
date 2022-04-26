@@ -1,9 +1,16 @@
 import React, { Component } from 'react'
+// Import centrally managed url paths
+import URL from '@/request/url'
+// Import axios request, rename to: $axios
+import $axios from '@/request'
 import './index.css'
 
 export default class Upload extends Component {
     state = {
         previewImgSrc: '',
+        file: null,
+        title: '',
+        postContent: '',
     }
 
     // change upload button
@@ -28,15 +35,42 @@ export default class Upload extends Component {
     // set preview image
     changeValue = (e) => {
         var file = e.target.files[0];
+        this.setState({ file })
         let url = URL.createObjectURL(file);
-        this.setState({ previewImgSrc: url })
+        this.setState({ previewImgSrc: url });
+    }
+
+    setTitle = (val) => {
+        this.setState({ title: val });
+    }
+
+    setPostContent = (val) => {
+        this.setState({ postContent: val });
+    }
+
+    handleSubmit = (e) => {
+        e.preventDefault();
+        const requestParams = {
+            file: this.state.file,
+            title: this.state.title,
+            postContent: this.state.postContent
+        }
+        $axios
+            .postRequest(URL.USER_POST_MESSAGE, requestParams)
+            .then(() => {
+                // redirect to main
+                this.props.history.push("/main");
+            })
+            .catch(err => {
+                console('ERROR:', err.message);
+            })
     }
 
     render() {
         const { previewImgSrc } = this.state;
         return (
             <div className='container'>
-                <form action="/post/find" method="POST" className="row">
+                <form onSubmit = { this.handleSubmit } className="row">
                     <div className="col-md-7 uploadLeft">
                         <div className='uploadLeftBox'>
                             <div className='uploadLeftBoxInner' onClick={ this.upload }>
@@ -62,11 +96,23 @@ export default class Upload extends Component {
                         </div>
                         <div className="col-md-12 input-group-lg">
                             <br />
-                            <input type="text" className="form-control" id="name" name="name" placeholder='Add your title'/>
+                            <input 
+                                type="text" 
+                                className="form-control" 
+                                id="title" 
+                                placeholder='Add your title'
+                                onChange = { e => this.setTitle(e.target.value) }
+                            />
                         </div>
                         <div className="col-md-12">
                             <br />
-                            <textarea type="text" className="form-control" name="postContent" rows="5" placeholder="Write your post..."></textarea>
+                            <textarea 
+                                type="text" 
+                                className="form-control" 
+                                rows="5" 
+                                placeholder="Write your post..."
+                                onChange = { e => this.setPostContent(e.target.value) }
+                            />
                         </div>
                         <div className="col-md-12">
                             <br />
