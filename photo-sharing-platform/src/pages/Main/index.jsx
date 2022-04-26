@@ -10,6 +10,29 @@ import { checkIsLogin } from '@/functions'
 import './index.css'
 
 export default class Main extends Component {
+	// componentDidMount() {
+	// 	// jusge whether account expires
+	// 	const logedInAccount = JSON.parse(localStorage.getItem('Account'));
+	// 	if(!checkIsLogin(logedInAccount)) {
+	// 		alert('Account login state expires! Please login again!');
+	// 		this.props.history.push("/login");
+	// 		return;
+	// 	}
+	// 	// send axios to change the database
+	// 	const requestParams = {
+	// 		account: logedInAccount
+	// 	}
+	// 	$axios
+	// 		.postRequest(URL.MAIN_PAGE_REQUESTED_IMAGES, requestParams)
+	// 		.then(res => {
+	// 			// set initial requested images
+	// 			this.setState({ resultImage: res })
+	// 		})
+	// 		.catch(err => {
+	// 			console('ERROR:', err.message);
+	// 		})
+	// }
+
 	state = {
 		resultImage: [
 			{

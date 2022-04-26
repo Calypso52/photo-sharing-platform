@@ -14,3 +14,12 @@ run to start:
 
 `npm start`
 
+
+
+## pages router
+
+1. /login
+2. /signup
+3. /main
+4. /upload
+
