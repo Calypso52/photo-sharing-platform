@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 // Import centrally managed url paths
-import URL from '@/request/url'
+import URLS from '@/request/url'
 // Import axios request, rename to: $axios
 import $axios from '@/request'
 import './index.css'
@@ -35,7 +35,7 @@ export default class Upload extends Component {
     // set preview image
     changeValue = (e) => {
         var file = e.target.files[0];
-        this.setState({ file })
+        this.setState({ file });
         let url = URL.createObjectURL(file);
         this.setState({ previewImgSrc: url });
     }
@@ -56,7 +56,7 @@ export default class Upload extends Component {
             postContent: this.state.postContent
         }
         $axios
-            .postRequest(URL.USER_POST_MESSAGE, requestParams)
+            .postRequest(URLS.USER_POST_MESSAGE, requestParams)
             .then(() => {
                 // redirect to main
                 this.props.history.push("/main");
