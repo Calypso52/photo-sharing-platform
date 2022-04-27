@@ -1,12 +1,12 @@
 import React, { Component } from 'react'
 import { Link } from "react-router-dom";
+import { withRouter } from '@/router/withRouter'
 import './index.css'
 // Import centrally managed url paths
-import URL from '@/request/url'
-// Import axios request, rename to: $axios
-import $axios from '@/request'
+import URLS from '@/request/url'
+import axios from 'axios'
 
-export default class Login extends Component {
+class Login extends Component {
 	componentDidMount() {
 		const logedInAccount = JSON.parse(localStorage.getItem('Account'));
 		const curTime = new Date().getTime();
@@ -44,7 +44,7 @@ export default class Login extends Component {
 	}
 
 	// Login authentication
-	handleLogin = () => {
+	handleLogin = async () => {
 		const { accountNumber, passWord } = this.state;
 		// account is missing
 		if (!accountNumber || accountNumber.length === 0) {
@@ -62,41 +62,36 @@ export default class Login extends Component {
 				password: passWord
 			}
 			this.setState({ cursor: 'wait' });
-			let loginVerification = $axios.postRequest(URL.LOG_IN_VERIFICATION, requestParams);
-			// process result
-			loginVerification
-				.then(responseData => {
-					this.setState({ cursor: 'default' });
-					// 1 means account error, 2 means password error, 3 means success
-					switch (responseData) {
-						case 1:
-							this.accountHint.innerHTML = 'Username not found. Please signup first!';
-							this.setState({ accountBorderButtomColor: 'red', accountErrorOpacity: 1 });
-							break;
-						case 2:
-							this.passwordHint.innerHTML = 'Password entered incorrectly!'
-							this.setState({ passwordBorderButtomColor: 'red', passwordErrorOpacity: 1 });
-							break;
-						case 3:
-							let accountLocalStorage = {
-								account: accountNumber,
-								password: passWord,
-								// Keep the account logged in for one hour
-								expire: new Date().getTime() + 1000 * 60 * 60
-							};
-							localStorage.setItem('Account', JSON.stringify(accountLocalStorage));
-							// Here, traverse and delete expired localStorage key-value pairs
-							this.clearExpired();
-							this.props.history.push("/main");
-							break;
-						default:
-							break;
-					}
-				})
-				.catch(error => {
-					this.setState({ cursor: 'default' });
-					alert('ERROR:', error.message);
-				})
+
+			let res = await axios.post(URLS.LOG_IN_VERIFICATION, requestParams);
+
+			let { data } = res;
+			this.setState({ cursor: 'default' });
+			// 1 means account error, 2 means password error, 3 means success
+			switch (data) {
+				case 1:
+					this.accountHint.innerHTML = 'Username not found. Please signup first!';
+					this.setState({ accountBorderButtomColor: 'red', accountErrorOpacity: 1 });
+					break;
+				case 2:
+					this.passwordHint.innerHTML = 'Password entered incorrectly!'
+					this.setState({ passwordBorderButtomColor: 'red', passwordErrorOpacity: 1 });
+					break;
+				case 3:
+					let accountLocalStorage = {
+						account: accountNumber,
+						password: passWord,
+						// Keep the account logged in for one hour
+						expire: new Date().getTime() + 1000 * 60 * 60
+					};
+					localStorage.setItem('Account', JSON.stringify(accountLocalStorage));
+					// Here, traverse and delete expired localStorage key-value pairs
+					this.clearExpired();
+					this.props.navigate("/main");
+					break;
+				default:
+					break;
+			}
 		}
 	}
 
@@ -178,3 +173,5 @@ export default class Login extends Component {
 		)
 	}
 }
+
+export default withRouter(Login)

@@ -18,7 +18,7 @@
     width: 200px;
     height: 320px;
     border-radius: 20px;
-    cursor: pointer;
+    cursor: zoom-in;
     overflow: hidden;
 }
 
@@ -37,7 +37,7 @@
     display: none;
     position: absolute;
     font-size: 50px;
-    top: 120px;
+    top: 220px;
     left: 80px;
     color: #DC3545;
     cursor: pointer;

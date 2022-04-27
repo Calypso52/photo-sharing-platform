@@ -1,11 +1,11 @@
 import React, { Component } from 'react'
 // Import centrally managed url paths
 import URLS from '@/request/url'
-// Import axios request, rename to: $axios
-import $axios from '@/request'
+import axios from 'axios'
+import { withRouter } from '@/router/withRouter'
 import './index.css'
 
-export default class Upload extends Component {
+class Upload extends Component {
     state = {
         previewImgSrc: '',
         file: null,
@@ -48,22 +48,15 @@ export default class Upload extends Component {
         this.setState({ postContent: val });
     }
 
-    handleSubmit = (e) => {
+    handleSubmit = async (e) => {
         e.preventDefault();
         const requestParams = {
             file: this.state.file,
             title: this.state.title,
             postContent: this.state.postContent
         }
-        $axios
-            .postRequest(URLS.USER_POST_MESSAGE, requestParams)
-            .then(() => {
-                // redirect to main
-                this.props.history.push("/main");
-            })
-            .catch(err => {
-                console('ERROR:', err.message);
-            })
+        await axios.post(URLS.USER_POST_MESSAGE, requestParams);
+		this.props.navigate("/main");
     }
 
     render() {
@@ -124,3 +117,5 @@ export default class Upload extends Component {
         )
     }
 }
+
+export default withRouter(Upload)

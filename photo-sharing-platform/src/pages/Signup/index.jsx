@@ -1,12 +1,12 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
+import { withRouter } from '@/router/withRouter'
 import './index.css'
 // Import centrally managed url paths
-import URL from '@/request/url'
-// Import axios request, rename to: $axios
-import $axios from '@/request'
+import URLS from '@/request/url'
+import axios from 'axios'
 
-export default class index extends Component {
+class Signup extends Component {
 	state = {
 		// account
 		accountNumber: '',
@@ -46,7 +46,7 @@ export default class index extends Component {
 	}
 
 	// Verify account password registration is correct
-	handleSignup = () => {
+	handleSignup = async () => {
 		const { accountNumber, passWord, confirmPassWord } = this.state;
 		// Account not filled
 		if (!accountNumber || accountNumber.length === 0) {
@@ -98,40 +98,33 @@ export default class index extends Component {
 			};
 			this.setState({ cursor: 'wait' });
 			// send request
-			let signupResult = $axios.postRequest(URL.USER_SIGN_UP, requestParams);
-			// precess result
-			signupResult
-				.then(responseData => {
-					// 1 means registration is successful, 2 means registration fails
-					switch (responseData) {
-						case 1:
-							alert('Signup success!');
-							// Successful registration, jump to the login interface (deliberately stuck)
-							setTimeout(() => {
-								this.props.history.push("/login");
-								this.setState({ cursor: 'default' });
-							}, 500);
-							break;
-						case 2:
-							// Registration fails (indicating that there are duplicate accounts), clear the three input boxes, and re-register
-							alert('The account is duplicated, please re-enter the account!');
-							this.setState({ accountNumber: '', passWord: '', confirmPassWord: '' });
-							this.setState({ cursor: 'default' });
-							break;
-						case 3:
-							// registration failed
-							alert('Signup failed!');
-							break;
-						default:
-							alert('Signup failed!');
-							break;
-					}
+			let res = await axios.post(URLS.USER_SIGN_UP, requestParams);
+			let { data } = res;
 
-				})
-				.catch(error => {
+			// 1 means registration is successful, 2 means registration fails
+			switch (data) {
+				case 1:
+					alert('Signup success!');
+					// Successful registration, jump to the login interface (deliberately stuck)
+					setTimeout(() => {
+						this.props.navigate("/login");
+						this.setState({ cursor: 'default' });
+					}, 500);
+					break;
+				case 2:
+					// Registration fails (indicating that there are duplicate accounts), clear the three input boxes, and re-register
+					alert('The account is duplicated, please re-enter the account!');
+					this.setState({ accountNumber: '', passWord: '', confirmPassWord: '' });
 					this.setState({ cursor: 'default' });
-					alert('ERROR:', error.message);
-				})
+					break;
+				case 3:
+					// registration failed
+					alert('Signup failed!');
+					break;
+				default:
+					alert('Signup failed!');
+					break;
+			}
 		}
 	}
 
@@ -214,3 +207,5 @@ export default class index extends Component {
 		)
 	}
 }
+
+export default withRouter(Signup)

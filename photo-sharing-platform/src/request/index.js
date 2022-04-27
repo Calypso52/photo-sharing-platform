@@ -20,6 +20,7 @@ function postRequest(url, params) {
         axios
             .post(url, params)
             .then(response => {
+                console.log(response.data)
                 resolve(response.data);
             })
             .catch(err => {

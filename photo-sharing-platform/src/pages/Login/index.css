@@ -1,28 +1,21 @@
 * {
-	/* 初始化 清除页面元素的内外边距 */
 	padding: 0;
 	margin: 0;
-	/* 盒子模型 */
 	box-sizing: border-box;
 }
 
 .loginUI {
-	/* 弹性布局 让页面元素垂直+水平居中 */
 	display: flex;
 	justify-content: center;
 	align-items: center;
 	/* 让页面始终占浏览器可视区域总高度 */
 	height: 100vh;
-	/* 背景渐变色 */
 	background: linear-gradient(#1D428A, #0d6588);
 }
 
 .login {
-	/* 弹性布局 让子元素称为弹性项目 */
 	display: flex;
-	/* 让弹性项目垂直排列 原理是改变弹性盒子的主轴方向 父元素就是弹性盒子 现在改变后的主轴方向是向下了 */
 	flex-direction: column;
-	/* 让弹性项目在交叉轴方向水平居中 现在主轴的方向是向下 交叉轴的方向是与主轴垂直 交叉轴的方向是向右 */
 	align-items: center;
 	width: 400px;
 	padding: 40px;
@@ -35,13 +28,11 @@
 	margin-bottom: 30px;
 }
 .login .login_box {
-	/* 相对定位 */
 	position: relative;
 	width: 100%;
 	margin-bottom: 20px;
 }
 .login .login_box .login_input {
-	/* 清除input框自带的边框和轮廓 */
 	outline: none;
 	border: none;
 	width: 100%;
@@ -50,7 +41,6 @@
 	color: #fff;
 	font-size: 16px;
 	border-bottom: 1px solid #fff;
-	/* 背景颜色为透明色 */
 	background-color: transparent;
 }
 .login .login_box label {
@@ -90,7 +80,6 @@
 	padding: 10px 20px;
     cursor: pointer;
 	color: #03e9f4;
-	/* 同样加个过渡 */
 	transition: all 0.5s;
 }
 .login .bottom_btn1:hover {
@@ -108,7 +97,6 @@
     cursor: pointer;
 	color: #03e9f4;
     text-decoration: none;
-	/* 同样加个过渡 */
 	transition: all 0.5s;
 }
 .login .bottom_btn2:hover {
