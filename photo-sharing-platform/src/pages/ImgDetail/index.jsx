@@ -11,7 +11,15 @@ export default class ImgDetail extends Component {
 		super(props);
 		console.log('in detail constructor:', store.getState());
 		this.state = {};
-		this.state.imgDetail = store.getState().imgDetail;
+		const imgDetail = store.getState().imgDetail;
+		this.state.imgDetail = imgDetail;
+		if(!sessionStorage.getItem('imgDetail') || sessionStorage.getItem('imgDetail') === '{}') {
+			sessionStorage.setItem('imgDetail', JSON.stringify(imgDetail));
+		}
+	}
+
+	componentDidMount () {
+		this.setState({ imgDetail: JSON.parse(sessionStorage.getItem('imgDetail')) });
 	}
 
 	processLikeClick = async () => {

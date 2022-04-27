@@ -14,7 +14,6 @@ class ImgPage extends Component {
 
 		// change icon from unlike to like
 		const curImgId = e.currentTarget.getAttribute('data-id');
-		this.props.setResultImage(curImgId);
 		const category = e.currentTarget.firstElementChild.getAttribute('data-category');
 
 		if (category === 'heart') {
@@ -35,6 +34,8 @@ class ImgPage extends Component {
 				alert('Delete success!');
 			}
 		}
+
+		this.props.setResultImage(curImgId, category);
 	}
 
 	processDetail = async (e) => {

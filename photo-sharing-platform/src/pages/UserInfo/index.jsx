@@ -44,11 +44,21 @@ export default class UserInfo extends Component {
 		this.setState({ resultImage: data });
 	}
 
-	setResultImage = (curImgId) => {
+	setResultImage = (curImgId, category) => {
 		const copyResultImage = [...this.state.resultImage];
-		this.setState({
-			resultImage: copyResultImage.map(item => item.imgId === parseInt(curImgId) ? { ...item, liked: !item.liked } : item)
-		});
+		if(category === 'heart') {
+			this.setState({
+				resultImage: copyResultImage.map(item => item.imgId === parseInt(curImgId) ? { ...item, liked: !item.liked } : item)
+			});
+		} else if(category === 'cross') {
+			copyResultImage.forEach((item, i) => {
+				if(item.imgId === parseInt(curImgId)) {
+					copyResultImage.splice(i, 1);
+				}
+			})
+			this.setState({ resultImage: copyResultImage });
+		}
+		
 	}
 
 	render() {
