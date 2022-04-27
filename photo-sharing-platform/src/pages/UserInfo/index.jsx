@@ -2,25 +2,57 @@ import React, { Component } from 'react'
 import { Container, Row, Col, Button } from 'react-bootstrap'
 import avatarImg from '@/assert/img/avatar.jpg'
 import Layout from '@/components/Layout'
+import ImgPage from '@/components/ImgPage'
+
+import URLS from '@/request/url'
+import axios from 'axios'
 import './index.css'
 
 export default class UserInfo extends Component {
 	state = {
-		account: 'test-account'
+		account: '',
+		displayModel: 0,
+		resultImage: []
+	}
+
+	componentDidMount() {
+		this.setState({ account: JSON.parse(localStorage.getItem('Account')).account });
+		this.getMyPosts();
 	}
 
 	// get user posts method
-	getMyPosts = () => {
-
+	getMyPosts = async () => {
+		const logedInAccount = JSON.parse(localStorage.getItem('Account')).account;
+		
+		const requestParams = {
+			account: logedInAccount
+		}
+		let res = await axios.post(URLS.GET_MY_POSTS, requestParams);
+		let { data } = res;
+		this.setState({ resultImage: data });
 	}
 
 	// get user favorites method
-	getMyFavorites = () => {
+	getMyFavorites = async (type) => {
+		const logedInAccount = JSON.parse(localStorage.getItem('Account')).account;
 
+		const requestParams = {
+			account: logedInAccount
+		}
+		let res = await axios.post(URLS.GET_MY_FAVORITES, requestParams);
+		let { data } = res;
+		this.setState({ resultImage: data });
+	}
+
+	setResultImage = (curImgId) => {
+		const copyResultImage = [...this.state.resultImage];
+		this.setState({
+			resultImage: copyResultImage.map(item => item.imgId === parseInt(curImgId) ? { ...item, liked: !item.liked } : item)
+		});
 	}
 
 	render() {
-		const { account } = this.state;
+		const { account, resultImage } = this.state;
 		return (
 			<div>
 				<Layout>
@@ -36,17 +68,17 @@ export default class UserInfo extends Component {
 												<img src={avatarImg} alt="avatar" />
 											</div>
 											<p className='detailName'>My Name</p>
-											<p className='detailAccount'>{ account }</p>
+											<p className='detailAccount'>{account}</p>
 											<div className='detailBottom'>
-												<Button 
+												<Button
 													variant="danger"
-													onClick = { this.getMyPosts }
+													onClick={this.getMyPosts}
 												>
 													My Posts
 												</Button>
-												<Button 
+												<Button
 													variant="danger"
-													onClick = { this.getMyFavorites }
+													onClick={this.getMyFavorites}
 												>
 													My Favorites
 												</Button>
@@ -56,6 +88,13 @@ export default class UserInfo extends Component {
 								</Row>
 							</Col>
 							<Col md={4}></Col>
+						</Row>
+						<Row>
+							<br />
+							<ImgPage
+								setResultImage = {this.setResultImage}
+								data={resultImage}
+							/>
 						</Row>
 					</Container>
 				</Layout>

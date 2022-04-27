@@ -1,9 +1,9 @@
-const initState = [];
-export default function countReducer(preState = initState, action) {
+const initialState = {};
+export default function imgDetail(preState = initialState, action) {
     const { type, data } = action;
 
     switch (type) {
-        case 'searchResult':
+        case 'imgDetail':
             return data;
         default:
             return preState;

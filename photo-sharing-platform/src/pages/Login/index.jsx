@@ -9,9 +9,7 @@ import axios from 'axios'
 class Login extends Component {
 	componentDidMount() {
 		const logedInAccount = JSON.parse(localStorage.getItem('Account'));
-		const curTime = new Date().getTime();
-		// Have account information and have not expired
-		if (logedInAccount && curTime < logedInAccount.expire) {
+		if (logedInAccount) {
 			this.setState({ accountNumber: logedInAccount.account, passWord: logedInAccount.password });
 		}
 	}
@@ -81,12 +79,8 @@ class Login extends Component {
 					let accountLocalStorage = {
 						account: accountNumber,
 						password: passWord,
-						// Keep the account logged in for one hour
-						expire: new Date().getTime() + 1000 * 60 * 60
 					};
 					localStorage.setItem('Account', JSON.stringify(accountLocalStorage));
-					// Here, traverse and delete expired localStorage key-value pairs
-					this.clearExpired();
 					this.props.navigate("/main");
 					break;
 				default:
@@ -103,17 +97,6 @@ class Login extends Component {
 	// password input Box color recovery
 	passwordRestoreInitial = () => {
 		this.setState({ passwordBorderButtomColor: '#fff', passwordErrorOpacity: 0 })
-	}
-
-	// Every time you log in, delete the expired player data cache in localstorage
-	clearExpired = () => {
-		const len = localStorage.length;
-		const curTime = new Date().getTime();
-		for (let i = 0; i < len; i++) {
-			let key = localStorage.key(i);
-			let value = JSON.parse(localStorage.getItem(key));
-			if (value.expire && value.expire <= curTime) localStorage.removeItem(key);
-		}
 	}
 
 	render() {

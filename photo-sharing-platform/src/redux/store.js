@@ -1,4 +1,11 @@
-import { createStore } from 'redux'
-import mainSearch from './reducers/mainSearch'
+import { createStore, combineReducers } from 'redux'
+import mainSearch from './reducers/search'
+import imgDetail from './reducers/imgDetail'
 
-export default createStore(mainSearch)
+const rootReducer = combineReducers({
+    mainSearch,
+    imgDetail
+})
+
+const store = createStore(rootReducer);
+export default store

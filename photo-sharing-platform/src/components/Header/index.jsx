@@ -29,6 +29,10 @@ class Header extends Component {
 		this.props.navigate('/main');
 	}
 
+	toUserInfo = () => {
+		
+	}
+
 	render() {
 		return (
 			<div>
@@ -50,7 +54,10 @@ class Header extends Component {
 							<button className="btn btn-danger topBarSearchBtn" type="submit" value="Submit"><i className="fas fa-search"></i></button>
 						</form>
 						<div className="topBarUser">
-							<div className="topBarAvatar">
+							<div 
+								className="topBarAvatar"
+								onClick = { this.toUserInfo }
+							>
 								<img src={ avatarImg } alt="avatar" />
 							</div>
 							<Dropdown>
