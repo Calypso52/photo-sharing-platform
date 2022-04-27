@@ -30,7 +30,12 @@ class Header extends Component {
 	}
 
 	toUserInfo = () => {
-		
+		this.props.navigate('/userInfo');
+	}
+
+	handleSignout = () => {
+		localStorage.removeItem('Account');
+		this.props.navigate('/login');
 	}
 
 	render() {
@@ -64,9 +69,9 @@ class Header extends Component {
 								<Dropdown.Toggle id='topBarDropdown'></Dropdown.Toggle>
 								<Dropdown.Menu variant="dark">
 									<Dropdown.Item href="/userInfo">Account Setting</Dropdown.Item>
-									<Dropdown.Item href="#/action-2">Modify Infomation</Dropdown.Item>
 									<NavDropdown.Divider />
-									<Dropdown.Item href="/login">Sign Out</Dropdown.Item>
+									{/* <Dropdown.Item href="/login">Sign Out</Dropdown.Item> */}
+									<Dropdown.Item onClick = {this.handleSignout}>Sign Out</Dropdown.Item>
 								</Dropdown.Menu>
 							</Dropdown>
 						</div>
