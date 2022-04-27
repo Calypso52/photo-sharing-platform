@@ -3,6 +3,7 @@ import React, { Component } from 'react'
 import URLS from '@/request/url'
 import axios from 'axios'
 import { withRouter } from '@/router/withRouter'
+import store from '@/redux/store'
 import './index.css'
 
 class Upload extends Component {
@@ -55,8 +56,17 @@ class Upload extends Component {
             title: this.state.title,
             postContent: this.state.postContent
         }
-        await axios.post(URLS.USER_POST_MESSAGE, requestParams);
-		this.props.navigate("/main");
+        let res = await axios.post(URLS.USER_POST_MESSAGE, requestParams);
+        const { imgId } = res.data;
+        
+        // redirect to the new posted image
+        const requestParams2 = {
+			imgId: imgId
+		};
+		let res2 = await axios.post(URLS.IMAGE_DETAIL, requestParams2);
+		const { data } = res2;
+		store.dispatch({ type: 'imgDetail', data });
+		this.props.navigate('/imgDetail');
     }
 
     render() {
