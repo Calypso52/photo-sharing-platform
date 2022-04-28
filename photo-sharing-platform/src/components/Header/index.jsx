@@ -19,14 +19,13 @@ class Header extends Component {
 	handleSubmit = async (e) => {
 		e.preventDefault();
 		const { input } = this.state;
-		console.log(input)
 		const requestParams = {
             input
         }
 		let res = await axios.post(URLS.USER_SEARCH_PHOTO, requestParams);
 		let { data } = res;
 		store.dispatch({ type: 'searchResult', data });
-		this.props.navigate('/main');
+		this.props.navigate(`/main/${input}`);
 	}
 
 	toUserInfo = () => {
@@ -45,7 +44,7 @@ class Header extends Component {
 					<div className="container">
 						<ul className="navbar-nav">
 							<li className="nav-item topBarHome">
-								<a className="nav-link active" aria-current="page" href="/main">Home</a>
+								<a className="nav-link active" aria-current="page" href="/home">Home</a>
 							</li>
 						</ul>
 						<form onSubmit = { this.handleSubmit } className="d-flex">
@@ -70,7 +69,6 @@ class Header extends Component {
 								<Dropdown.Menu variant="dark">
 									<Dropdown.Item href="/userInfo">Account Setting</Dropdown.Item>
 									<NavDropdown.Divider />
-									{/* <Dropdown.Item href="/login">Sign Out</Dropdown.Item> */}
 									<Dropdown.Item onClick = {this.handleSignout}>Sign Out</Dropdown.Item>
 								</Dropdown.Menu>
 							</Dropdown>

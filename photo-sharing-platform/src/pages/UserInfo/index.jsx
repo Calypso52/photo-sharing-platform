@@ -48,11 +48,11 @@ export default class UserInfo extends Component {
 		const copyResultImage = [...this.state.resultImage];
 		if(category === 'heart') {
 			this.setState({
-				resultImage: copyResultImage.map(item => item.imgId === parseInt(curImgId) ? { ...item, liked: !item.liked } : item)
+				resultImage: copyResultImage.map(item => item.imgId === curImgId ? { ...item, liked: !item.liked } : item)
 			});
 		} else if(category === 'cross') {
 			copyResultImage.forEach((item, i) => {
-				if(item.imgId === parseInt(curImgId)) {
+				if(item.imgId === curImgId) {
 					copyResultImage.splice(i, 1);
 				}
 			})

@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { Routes, Route, Navigate } from "react-router-dom";
 import Login from '@/pages/Login'
 import Signup from '@/pages/Signup'
+import Home from '@/pages/Home'
 import Main from '@/pages/Main'
 import Post from '@/pages/Post'
 import UserInfo from '@/pages/UserInfo'
@@ -14,7 +15,8 @@ export default class AppRouter extends Component {
                 <Routes>
                     <Route path="/login" element={<Login />}></Route>
                     <Route path="/signup" element={<Signup />}></Route>
-                    <Route path="/main" element={<Main />}></Route>
+                    <Route path="/home" element={<Home />}></Route>
+                    <Route path="/main/:content" element={<Main />}></Route>
                     <Route path="/post" element={<Post />}></Route>
                     <Route path="/userInfo" element={<UserInfo />}></Route>
                     <Route path="/imgDetail" element={<ImgDetail />}></Route>

@@ -81,7 +81,7 @@ class Login extends Component {
 						password: passWord,
 					};
 					localStorage.setItem('Account', JSON.stringify(accountLocalStorage));
-					this.props.navigate("/main");
+					this.props.navigate("/home");
 					break;
 				default:
 					break;
