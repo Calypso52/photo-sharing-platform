@@ -54,7 +54,8 @@ class Upload extends Component {
         const requestParams = {
             file: this.state.file,
             title: this.state.title,
-            postContent: this.state.postContent
+            postContent: this.state.postContent,
+            account: JSON.parse(localStorage.getItem('Account')).account
         }
         let res = await axios.post(URLS.USER_POST_MESSAGE, requestParams);
         const { imgId } = res.data;
