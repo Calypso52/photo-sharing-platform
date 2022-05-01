@@ -99,11 +99,11 @@ class Signup extends Component {
 			this.setState({ cursor: 'wait' });
 			// send request
 			let res = await axios.post(URLS.USER_SIGN_UP, requestParams);
-			let { data } = res;
+			let { body } = res.data;
 
 			// 1 means registration is successful, 2 means registration fails
-			switch (data) {
-				case 1:
+			switch (body) {
+				case "1":
 					alert('Signup success!');
 					// Successful registration, jump to the login interface (deliberately stuck)
 					setTimeout(() => {
@@ -111,13 +111,13 @@ class Signup extends Component {
 						this.setState({ cursor: 'default' });
 					}, 500);
 					break;
-				case 2:
+				case "2":
 					// Registration fails (indicating that there are duplicate accounts), clear the three input boxes, and re-register
 					alert('The account is duplicated, please re-enter the account!');
 					this.setState({ accountNumber: '', passWord: '', confirmPassWord: '' });
 					this.setState({ cursor: 'default' });
 					break;
-				case 3:
+				case "3":
 					// registration failed
 					alert('Signup failed!');
 					break;

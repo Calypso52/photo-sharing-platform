@@ -19,8 +19,10 @@ class Home extends Component {
 			account: logedInAccount
 		}
 		let res = await axios.post(URLS.MAIN_PAGE_REQUESTED_IMAGES, requestParams);
-		let { data } = res;
-		this.setState({ resultImage: data });
+		
+		let { body } = res.data;
+		// console.log('***', body)
+		this.setState({ resultImage: body });
 	}
 
 	setResultImage = (curImgId) => {

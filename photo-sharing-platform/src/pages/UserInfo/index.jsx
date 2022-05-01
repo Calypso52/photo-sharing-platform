@@ -28,8 +28,8 @@ export default class UserInfo extends Component {
 			account: logedInAccount
 		}
 		let res = await axios.post(URLS.GET_MY_POSTS, requestParams);
-		let { data } = res;
-		this.setState({ resultImage: data });
+		let { body } = res.data;
+		this.setState({ resultImage: body });
 	}
 
 	// get user favorites method
@@ -40,8 +40,8 @@ export default class UserInfo extends Component {
 			account: logedInAccount
 		}
 		let res = await axios.post(URLS.GET_MY_FAVORITES, requestParams);
-		let { data } = res;
-		this.setState({ resultImage: data });
+		let { body } = res.data;
+		this.setState({ resultImage: body });
 	}
 
 	setResultImage = (curImgId, category) => {

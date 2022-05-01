@@ -63,19 +63,20 @@ class Login extends Component {
 
 			let res = await axios.post(URLS.LOG_IN_VERIFICATION, requestParams);
 
-			let { data } = res;
+			let { body } = res.data;
+			console.log(body)
 			this.setState({ cursor: 'default' });
 			// 1 means account error, 2 means password error, 3 means success
-			switch (data) {
-				case 1:
+			switch (body) {
+				case "1":
 					this.accountHint.innerHTML = 'Username not found. Please signup first!';
 					this.setState({ accountBorderButtomColor: 'red', accountErrorOpacity: 1 });
 					break;
-				case 2:
+				case "2":
 					this.passwordHint.innerHTML = 'Password entered incorrectly!'
 					this.setState({ passwordBorderButtomColor: 'red', passwordErrorOpacity: 1 });
 					break;
-				case 3:
+				case "3":
 					let accountLocalStorage = {
 						account: accountNumber,
 						password: passWord,

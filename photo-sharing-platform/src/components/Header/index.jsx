@@ -20,11 +20,13 @@ class Header extends Component {
 		e.preventDefault();
 		const { input } = this.state;
 		const requestParams = {
-            input
+            input,
+			account: JSON.parse(localStorage.getItem('Account')).account
         }
 		let res = await axios.post(URLS.USER_SEARCH_PHOTO, requestParams);
-		let { data } = res;
-		store.dispatch({ type: 'searchResult', data });
+		let { body } = res.data;
+		
+		store.dispatch({ type: 'searchResult', data: body });
 		this.props.navigate(`/main/${input}`);
 	}
 

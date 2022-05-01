@@ -12,20 +12,24 @@ class Main extends Component {
 	constructor(props) {
 		super(props);
 		console.log('in main constructor:', store.getState())
-		this.state = {};
-		this.state.resultImage = store.getState().mainSearch;
+		this.state = {
+			resultImage: [],
+			isFirst: true
+		};
+		const result = store.getState().mainSearch
+		this.state.resultImage = result;
+		if(result.length) this.state.isFirst = false;
 	}
 
 	async componentDidMount() {
-		// window.location.reload();
-		if(window.location.pathname !== '/main') {
+		if(window.location.pathname !== '/main' && this.state.isFirst === true) {
 			const input = window.location.pathname.split('/').pop();
 			const requestParams = {
 				input
 			}
 			let res = await axios.post(URLS.USER_SEARCH_PHOTO, requestParams);
-			let { data } = res;
-			this.setState({ resultImage: data });
+			let { body } = res.data;
+			this.setState({ resultImage: body });
 		}
 	}
 
@@ -38,7 +42,6 @@ class Main extends Component {
 
 	render() {
 		const { resultImage } = this.state;
-		console.log('新数据:', store.getState().mainSearch);
 		return (
 			<div>
 				<Layout>

@@ -44,8 +44,8 @@ class ImgPage extends Component {
 			imgId: curImgId
 		};
 		let res = await axios.post(URLS.IMAGE_DETAIL, requestParams);
-		const { data } = res;
-		store.dispatch({ type: 'imgDetail', data });
+		const { body } = res.data;
+		store.dispatch({ type: 'imgDetail', data: body });
 		this.props.navigate('/imgDetail');
 	}
 
