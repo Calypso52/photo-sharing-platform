@@ -58,6 +58,7 @@ class Upload extends Component {
             account: JSON.parse(localStorage.getItem('Account')).account
         }
         let res = await axios.post(URLS.USER_POST_MESSAGE, requestParams);
+        alert('Successfully posted! Now navigate to the detail you just posted!');
         const { imgId } = res.data;
         
         // redirect to the new posted image
