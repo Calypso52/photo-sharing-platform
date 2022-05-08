@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import Layout from '@/components/Layout'
 import avatarImg from '@/assert/img/avatar.jpg'
+import ToPost from '@/components/ToPost'
 import URLS from '@/request/url'
 import axios from 'axios'
 import store from '@/redux/store'
@@ -88,6 +89,7 @@ export default class ImgDetail extends Component {
 						</div>
 					</div>
 				</Layout>
+				<ToPost/>
 			</div>
 		)
 	}

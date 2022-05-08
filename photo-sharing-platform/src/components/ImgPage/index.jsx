@@ -30,7 +30,7 @@ class ImgPage extends Component {
 					imgId: curImgId,
 					account: logedInAccount
 				}
-				await axios.delete(URLS.DELETE_IMAGE, requestParams);
+				await axios.post(URLS.DELETE_IMAGE, requestParams);
 				alert('Delete success!');
 			}
 		}

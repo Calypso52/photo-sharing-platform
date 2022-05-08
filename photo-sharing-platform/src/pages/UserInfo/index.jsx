@@ -3,6 +3,7 @@ import { Container, Row, Col, Button } from 'react-bootstrap'
 import avatarImg from '@/assert/img/avatar.jpg'
 import Layout from '@/components/Layout'
 import ImgPage from '@/components/ImgPage'
+import ToPost from '@/components/ToPost'
 
 import URLS from '@/request/url'
 import axios from 'axios'
@@ -108,6 +109,7 @@ export default class UserInfo extends Component {
 						</Row>
 					</Container>
 				</Layout>
+				<ToPost/>
 			</div>
 		)
 	}

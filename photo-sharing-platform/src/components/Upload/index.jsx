@@ -9,9 +9,10 @@ import './index.css'
 class Upload extends Component {
     state = {
         previewImgSrc: '',
-        file: null,
         title: '',
         postContent: '',
+        label1: '',
+        label2: ''
     }
 
     // change upload button
@@ -35,8 +36,7 @@ class Upload extends Component {
 
     // set preview image
     changeValue = (e) => {
-        var file = e.target.files[0];
-        this.setState({ file });
+        let file = e.target.files[0];
         let url = URL.createObjectURL(file);
         this.setState({ previewImgSrc: url });
     }
@@ -45,50 +45,69 @@ class Upload extends Component {
         this.setState({ title: val });
     }
 
+    setLabel1 = (e) => {
+        this.setState({ label1: e.target.value });
+    }
+
+    setLabel2 = (e) => {
+        this.setState({ label2: e.target.value });
+    }
+
     setPostContent = (val) => {
         this.setState({ postContent: val });
     }
 
     handleSubmit = async (e) => {
         e.preventDefault();
-        const requestParams = {
-            file: this.state.file,
-            title: this.state.title,
-            postContent: this.state.postContent,
-            account: JSON.parse(localStorage.getItem('Account')).account
+        // get form file
+        const files = document.getElementById('uploadFileInput').files[0];
+        // set labels combination
+        const { label1, label2 } = this.state;
+        const label = label2.length ? label1 + ',' + label2 : label1;
+        // set request body
+        const config = {
+            headers: {
+                'Content-Type': files.type,
+                'x-amz-meta-customLabels': label,
+                'x-amz-meta-account': JSON.parse(localStorage.getItem('Account')).account,
+                'x-amz-meta-postContent': this.state.postContent,
+                'x-amz-meta-title': this.state.title
+            }
         }
-        let res = await axios.post(URLS.USER_POST_MESSAGE, requestParams);
+
+        let url = URLS.USER_POST_MESSAGE + '/post-s3-bucket/' + files.name;
+        let res = await axios.put(url, files, config);
         alert('Successfully posted! Now navigate to the detail you just posted!');
         const { imgId } = res.data;
-        
+
         // redirect to the new posted image
         const requestParams2 = {
-			imgId: imgId
-		};
-		let res2 = await axios.post(URLS.IMAGE_DETAIL, requestParams2);
-		const { data } = res2;
-		store.dispatch({ type: 'imgDetail', data });
-		this.props.navigate('/imgDetail');
+            imgId: imgId
+        };
+        let res2 = await axios.post(URLS.IMAGE_DETAIL, requestParams2);
+        const { data } = res2;
+        store.dispatch({ type: 'imgDetail', data });
+        this.props.navigate('/imgDetail');
     }
 
     render() {
         const { previewImgSrc } = this.state;
         return (
             <div className='container'>
-                <form onSubmit = { this.handleSubmit } className="row">
+                <form onSubmit={this.handleSubmit} className="row">
                     <div className="col-md-7 uploadLeft">
                         <div className='uploadLeftBox'>
-                            <div className='uploadLeftBoxInner' onClick={ this.upload }>
+                            <div className='uploadLeftBoxInner' onClick={this.upload}>
                                 <div className="uploadIconBox">
                                     <i className="fas fa-regular fa-plus"></i>
                                     <br />
                                     <p>Click to upload</p>
                                 </div>
-                                <input 
-                                    type="file" 
-                                    id="uploadFileInput" 
-                                    name="file" 
-                                    onChange={ this.changeValue }
+                                <input
+                                    type="file"
+                                    id="uploadFileInput"
+                                    name="file"
+                                    onChange={this.changeValue}
                                 />
                             </div>
                         </div>
@@ -96,27 +115,52 @@ class Upload extends Component {
                     <div className="col-md-5">
                         <div className="col-md-12">
                             <div className="previewImageBox">
-                                <img src={ previewImgSrc } alt="img"/>
+                                <img src={previewImgSrc} alt="img" />
                             </div>
                         </div>
                         <div className="col-md-12 input-group-lg">
                             <br />
-                            <input 
-                                type="text" 
-                                className="form-control" 
-                                id="title" 
+                            <input
+                                type="text"
+                                className="form-control"
+                                id="title"
                                 placeholder='Add your title'
-                                onChange = { e => this.setTitle(e.target.value) }
+                                onChange={e => this.setTitle(e.target.value)}
                             />
+                        </div>
+                        <div className="col-md-12 input-group-lg">
+                            <br />
+                            <div className='row'>
+                                <div className='col-md-6'>
+                                    <input
+                                        type="text"
+                                        className="form-control"
+                                        id="title"
+                                        placeholder='Attach your label1'
+                                        value={this.state.label1}
+                                        onChange={this.setLabel1}
+                                    />
+                                </div>
+                                <div className='col-md-6'>
+                                    <input
+                                        type="text"
+                                        className="form-control"
+                                        id="title"
+                                        placeholder='Attach your label2'
+                                        value={this.state.label2}
+                                        onChange={this.setLabel2}
+                                    />
+                                </div>
+                            </div>
                         </div>
                         <div className="col-md-12">
                             <br />
-                            <textarea 
-                                type="text" 
-                                className="form-control" 
-                                rows="5" 
+                            <textarea
+                                type="text"
+                                className="form-control"
+                                rows="5"
                                 placeholder="Write your post..."
-                                onChange = { e => this.setPostContent(e.target.value) }
+                                onChange={e => this.setPostContent(e.target.value)}
                             />
                         </div>
                         <div className="col-md-12">

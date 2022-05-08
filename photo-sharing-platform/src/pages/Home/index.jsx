@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
-import { Link } from "react-router-dom";
 import Layout from '@/components/Layout'
 import URLS from '@/request/url'
 import axios from 'axios'
 import { withRouter } from '@/router/withRouter'
 import ImgPage from '@/components/ImgPage'
+import ToPost from '@/components/ToPost'
 import './index.css'
 
 class Home extends Component {
@@ -42,9 +42,7 @@ class Home extends Component {
 						setResultImage={this.setResultImage}
 					/>
 				</Layout>
-				<Link to='/post' className='add'>
-					<i className="fas fa-plus"></i>
-				</Link>
+				<ToPost/>
 			</div>
 		)
 	}
