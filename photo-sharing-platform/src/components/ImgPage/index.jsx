@@ -39,11 +39,10 @@ class ImgPage extends Component {
 	}
 
 	processDetail = async (e) => {
-		const logedInAccount = JSON.parse(localStorage.getItem('Account')).account;
 		const curImgId = e.currentTarget.getAttribute('data-id');
 		const requestParams = {
 			imgId: curImgId,
-			account: logedInAccount
+			account: JSON.parse(localStorage.getItem('Account')).account
 		};
 		let res = await axios.post(URLS.IMAGE_DETAIL, requestParams);
 		const { body } = res.data;
@@ -86,6 +85,7 @@ class ImgPage extends Component {
 				</Col>
 			)
 		}
+		console.log('所有的:', itemList);
 
 		return (
 			<div>

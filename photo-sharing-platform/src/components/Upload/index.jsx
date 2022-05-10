@@ -3,7 +3,7 @@ import React, { Component } from 'react'
 import URLS from '@/request/url'
 import axios from 'axios'
 import { withRouter } from '@/router/withRouter'
-import store from '@/redux/store'
+import { v4 as uuid } from 'uuid'
 import './index.css'
 
 class Upload extends Component {
@@ -75,19 +75,11 @@ class Upload extends Component {
             }
         }
 
-        let url = URLS.USER_POST_MESSAGE + '/post-s3-bucket/' + files.name;
-        let res = await axios.put(url, files, config);
+        let url = URLS.USER_POST_MESSAGE + '/post-s3-bucket/' + uuid() + '-' + files.name;
+        await axios.put(url, files, config);
         alert('Successfully posted! Now navigate to the detail you just posted!');
-        const { imgId } = res.data;
-
-        // redirect to the new posted image
-        const requestParams2 = {
-            imgId: imgId
-        };
-        let res2 = await axios.post(URLS.IMAGE_DETAIL, requestParams2);
-        const { data } = res2;
-        store.dispatch({ type: 'imgDetail', data });
-        this.props.navigate('/imgDetail');
+        
+        this.props.navigate('/userInfo');
     }
 
     render() {

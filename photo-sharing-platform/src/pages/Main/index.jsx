@@ -1,11 +1,13 @@
 import React, { Component } from 'react'
-import { Link } from "react-router-dom";
 import Layout from '@/components/Layout'
 import URLS from '@/request/url'
 import axios from 'axios'
 import { withRouter } from '@/router/withRouter'
 import store from '@/redux/store'
 import ImgPage from '@/components/ImgPage'
+import ToPost from '@/components/ToPost'
+import Loading from '@/components/Loading'
+import PubSub from 'pubsub-js'
 import './index.css'
 
 class Main extends Component {
@@ -14,23 +16,30 @@ class Main extends Component {
 		console.log('in main constructor:', store.getState())
 		this.state = {
 			resultImage: [],
-			isFirst: true
+			isFirst: true,
+			isLoading: false
 		};
 		const result = store.getState().mainSearch
 		this.state.resultImage = result;
-		if(result.length) this.state.isFirst = false;
+		if (result.length) this.state.isFirst = false;
 	}
 
 	async componentDidMount() {
-		if(window.location.pathname !== '/main' && this.state.isFirst === true) {
+		if (window.location.pathname !== '/main' && this.state.isFirst === true) {
+			this.setState({ isLoading: true });
 			const input = window.location.pathname.split('/').pop();
 			const requestParams = {
-				input
+				input,
+				account: JSON.parse(localStorage.getItem('Account')).account
 			}
 			let res = await axios.post(URLS.USER_SEARCH_PHOTO, requestParams);
 			let { body } = res.data;
-			this.setState({ resultImage: body });
+			let result = body || [];
+			this.setState({ resultImage: result, isLoading: false });
 		}
+		PubSub.subscribe('set-selected-index', (_, data) => {
+			this.setState({ resultImage: data, isLoading: false });
+		})
 	}
 
 	setResultImage = (curImgId) => {
@@ -41,18 +50,21 @@ class Main extends Component {
 	}
 
 	render() {
-		const { resultImage } = this.state;
+		const { resultImage, isLoading } = this.state;
 		return (
 			<div>
 				<Layout>
-					<ImgPage
-						data={resultImage}
-						setResultImage={this.setResultImage}
-					/>
+					{
+						isLoading ?
+							<Loading />
+							:
+							<ImgPage
+								data={resultImage}
+								setResultImage={this.setResultImage}
+							/>
+					}
 				</Layout>
-				<Link to='/post' className='add'>
-					<i className="fas fa-plus"></i>
-				</Link>
+				<ToPost />
 			</div>
 		)
 	}

@@ -4,7 +4,7 @@ import avatarImg from '@/assert/img/avatar.jpg'
 import Layout from '@/components/Layout'
 import ImgPage from '@/components/ImgPage'
 import ToPost from '@/components/ToPost'
-
+import Loading from '@/components/Loading'
 import URLS from '@/request/url'
 import axios from 'axios'
 import './index.css'
@@ -13,57 +13,59 @@ export default class UserInfo extends Component {
 	state = {
 		account: '',
 		displayModel: 0,
-		resultImage: []
+		resultImage: [],
+		isLoading: false
 	}
 
-	componentDidMount() {
-		this.setState({ account: JSON.parse(localStorage.getItem('Account')).account });
-		this.getMyPosts();
-	}
+	// componentDidMount() {
+	// 	this.setState({ account: JSON.parse(localStorage.getItem('Account')).account });
+	// 	this.getMyPosts();
+	// }
 
 	// get user posts method
 	getMyPosts = async () => {
-		const logedInAccount = JSON.parse(localStorage.getItem('Account')).account;
-		
+		this.setState({ isLoading: true });
+
 		const requestParams = {
-			account: logedInAccount
+			account: JSON.parse(localStorage.getItem('Account')).account
 		}
 		let res = await axios.post(URLS.GET_MY_POSTS, requestParams);
 		let { body } = res.data;
-		this.setState({ resultImage: body });
+		let result = body || [];
+		this.setState({ resultImage: result, isLoading: false });
 	}
 
 	// get user favorites method
 	getMyFavorites = async (type) => {
-		const logedInAccount = JSON.parse(localStorage.getItem('Account')).account;
+		this.setState({ isLoading: true });
 
 		const requestParams = {
-			account: logedInAccount
+			account: JSON.parse(localStorage.getItem('Account')).account
 		}
 		let res = await axios.post(URLS.GET_MY_FAVORITES, requestParams);
 		let { body } = res.data;
-		this.setState({ resultImage: body });
+		this.setState({ resultImage: body, isLoading: false });
 	}
 
 	setResultImage = (curImgId, category) => {
 		const copyResultImage = [...this.state.resultImage];
-		if(category === 'heart') {
+		if (category === 'heart') {
 			this.setState({
 				resultImage: copyResultImage.map(item => item.imgId === curImgId ? { ...item, liked: !item.liked } : item)
 			});
-		} else if(category === 'cross') {
+		} else if (category === 'cross') {
 			copyResultImage.forEach((item, i) => {
-				if(item.imgId === curImgId) {
+				if (item.imgId === curImgId) {
 					copyResultImage.splice(i, 1);
 				}
 			})
 			this.setState({ resultImage: copyResultImage });
 		}
-		
+
 	}
 
 	render() {
-		const { account, resultImage } = this.state;
+		const { account, resultImage, isLoading } = this.state;
 		return (
 			<div>
 				<Layout>
@@ -101,15 +103,22 @@ export default class UserInfo extends Component {
 							<Col md={4}></Col>
 						</Row>
 						<Row>
-							<br />
-							<ImgPage
-								setResultImage = {this.setResultImage}
-								data={resultImage}
-							/>
+							{
+								isLoading ?
+									<Loading />
+									:
+									<div>
+										<br />
+										<ImgPage
+											setResultImage={this.setResultImage}
+											data={resultImage}
+										/>
+									</div>
+							}
 						</Row>
 					</Container>
 				</Layout>
-				<ToPost/>
+				<ToPost />
 			</div>
 		)
 	}

@@ -5,24 +5,26 @@ import axios from 'axios'
 import { withRouter } from '@/router/withRouter'
 import ImgPage from '@/components/ImgPage'
 import ToPost from '@/components/ToPost'
+import Loading from '@/components/Loading'
 import './index.css'
 
 class Home extends Component {
 	state = {
-		resultImage: []
+		resultImage: [],
+		isLoading: false
 	}
 
 	async componentDidMount() {
-		const logedInAccount = JSON.parse(localStorage.getItem('Account')).account;
+		this.setState({ isLoading: true });
 		// get recommended pictures
 		const requestParams = {
-			account: logedInAccount
+			account: JSON.parse(localStorage.getItem('Account')).account
 		}
 		let res = await axios.post(URLS.MAIN_PAGE_REQUESTED_IMAGES, requestParams);
-		
+
 		let { body } = res.data;
-		// console.log('***', body)
-		this.setState({ resultImage: body });
+		let result = body || [];
+		this.setState({ resultImage: result, isLoading: false });
 	}
 
 	setResultImage = (curImgId) => {
@@ -33,16 +35,21 @@ class Home extends Component {
 	}
 
 	render() {
-		const { resultImage } = this.state;
+		const { resultImage, isLoading } = this.state;
 		return (
 			<div>
 				<Layout>
-					<ImgPage
-						data={resultImage}
-						setResultImage={this.setResultImage}
-					/>
+					{
+						isLoading ?
+							<Loading />
+							:
+							<ImgPage
+								data={resultImage}
+								setResultImage={this.setResultImage}
+							/>
+					}
 				</Layout>
-				<ToPost/>
+				<ToPost />
 			</div>
 		)
 	}

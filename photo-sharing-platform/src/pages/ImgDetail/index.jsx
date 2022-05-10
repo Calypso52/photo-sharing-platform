@@ -10,17 +10,9 @@ import './index.css'
 export default class ImgDetail extends Component {
 	constructor(props) {
 		super(props);
-		console.log('in detail constructor:', store.getState());
 		this.state = {};
 		const imgDetail = store.getState().imgDetail;
 		this.state.imgDetail = imgDetail;
-		if(!sessionStorage.getItem('imgDetail') || sessionStorage.getItem('imgDetail') === '{}') {
-			sessionStorage.setItem('imgDetail', JSON.stringify(imgDetail));
-		}
-	}
-
-	componentDidMount () {
-		this.setState({ imgDetail: JSON.parse(sessionStorage.getItem('imgDetail')) });
 	}
 
 	processLikeClick = async () => {
@@ -54,11 +46,11 @@ export default class ImgDetail extends Component {
 							<div className="col-md-10">
 								<div className='detailBox'>
 									<div className='detailImageBox'>
-										<img src="https://www.bookemon.com/datavolt2/77558ea58e9f6447f80deb1061e9b274_web.jpg" alt="" />
+										<img src={imgDetail.img} alt="img" />
 									</div>
 									<div className='detailInfoBox'>
 										<p className='detailTitle'>
-											{imgDetail.title}
+											{ imgDetail.title }
 										</p>
 										<div className='titleLine'></div>
 										<div className='detailUserInfo'>

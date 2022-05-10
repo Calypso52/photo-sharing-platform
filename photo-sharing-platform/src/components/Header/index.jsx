@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import avatarImg from '@/assert/img/avatar.jpg'
 import { Dropdown, NavDropdown } from 'react-bootstrap'
 import { withRouter } from '@/router/withRouter'
+import PubSub from 'pubsub-js'
 import URLS from '@/request/url'
 import axios from 'axios'
 import store from '@/redux/store'
@@ -25,9 +26,11 @@ class Header extends Component {
         }
 		let res = await axios.post(URLS.USER_SEARCH_PHOTO, requestParams);
 		let { body } = res.data;
+		let result = body || [];
 		
-		store.dispatch({ type: 'searchResult', data: body });
+		store.dispatch({ type: 'searchResult', data: result });
 		this.props.navigate(`/main/${input}`);
+		PubSub.publish('set-selected-index', result);
 	}
 
 	toUserInfo = () => {
