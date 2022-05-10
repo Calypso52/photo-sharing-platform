@@ -25,18 +25,18 @@ class Main extends Component {
 	}
 
 	async componentDidMount() {
-		if (window.location.pathname !== '/main' && this.state.isFirst === true) {
-			this.setState({ isLoading: true });
-			const input = window.location.pathname.split('/').pop();
-			const requestParams = {
-				input,
-				account: JSON.parse(localStorage.getItem('Account')).account
-			}
-			let res = await axios.post(URLS.USER_SEARCH_PHOTO, requestParams);
-			let { body } = res.data;
-			let result = body || [];
-			this.setState({ resultImage: result, isLoading: false });
-		}
+		// if (window.location.pathname !== '/main' && this.state.isFirst === true) {
+		// 	this.setState({ isLoading: true });
+		// 	const input = window.location.pathname.split('/').pop();
+		// 	const requestParams = {
+		// 		input,
+		// 		account: JSON.parse(localStorage.getItem('Account')).account
+		// 	}
+		// 	let res = await axios.post(URLS.USER_SEARCH_PHOTO, requestParams);
+		// 	let { body } = res.data;
+		// 	let result = body || [];
+		// 	this.setState({ resultImage: result, isLoading: false });
+		// }
 		PubSub.subscribe('set-selected-index', (_, data) => {
 			this.setState({ resultImage: data, isLoading: false });
 		})
