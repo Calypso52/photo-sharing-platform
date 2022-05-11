@@ -17,10 +17,10 @@ export default class UserInfo extends Component {
 		isLoading: false
 	}
 
-	// componentDidMount() {
-	// 	this.setState({ account: JSON.parse(localStorage.getItem('Account')).account });
-	// 	this.getMyPosts();
-	// }
+	componentDidMount() {
+		this.setState({ account: JSON.parse(localStorage.getItem('Account')).account });
+		this.getMyPosts();
+	}
 
 	// get user posts method
 	getMyPosts = async () => {

@@ -8,6 +8,8 @@ import ToPost from '@/components/ToPost'
 import Loading from '@/components/Loading'
 import './index.css'
 
+axios.defaults.timeout = 100000;
+
 class Home extends Component {
 	state = {
 		resultImage: [],
@@ -20,7 +22,14 @@ class Home extends Component {
 		const requestParams = {
 			account: JSON.parse(localStorage.getItem('Account')).account
 		}
-		let res = await axios.post(URLS.MAIN_PAGE_REQUESTED_IMAGES, requestParams);
+		// let res = await axios({
+		// 	method: 'post',
+		// 	url: URLS.MAIN_PAGE_REQUESTED_IMAGES,
+		// 	timeout: 100000,
+		// 	data: requestParams
+		// })
+		let res = await axios.post(URLS.MAIN_PAGE_REQUESTED_IMAGES, requestParams, {timeout: 1000000});
+		console.log('recom:', res);
 
 		let { body } = res.data;
 		let result = body || [];
