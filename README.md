@@ -1,3 +1,6 @@
+# Course Project Paper
+https://drive.google.com/file/d/1Gnf7FUlUQIaIKVC_85_N81Ov7wbxTtiC/view?usp=sharing
+
 # photo-sharing-platform
 
 after cloning, under file:
